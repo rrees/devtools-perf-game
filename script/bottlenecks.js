@@ -38,25 +38,29 @@ Utils.filter = function(array, test) {
  * @return {Entity} Nearest Entity
  */
 Utils.nearest = function(from, entities) {
-  var distances = [];
+    if (entities.length == 0) {
+      return null;
+    }
+    var nearestEntity = undefined;
+    var currentShortestDistance = undefined;
+
   for (var i = 0; i < entities.length; i++) {
     var to = entities[i];
     if (from === to) continue;
     var distance = this.distance(from, to);
-    distances.push({
-      target: to,
-      distance: distance
-    });
-  }
-  if (!distances.length) {
-    return null;
-  }
-  var sortedDistances = distances.sort(
-    function sortDistances(a, b) {
-      return a.distance - b.distance;
+    if(!nearestEntity) {
+        nearestEntity = to;
+        currentShortestDistance = distance;
+        continue;
     }
-  );
-  return sortedDistances[0].target;
+
+    if(distance < currentShortestDistance) {
+        nearestEntity = to;
+        currentShortestDistance = distance;
+    }
+  }
+
+  return nearestEntity;
 };
 
 /**
@@ -86,7 +90,6 @@ var axes = {
  * @param {Number} value Distance to move
  */
 Utils.moveInDirection = function(direction, value) {
-  Utils.justAnExpensiveLoop();
   value /= 100;
   for (var i = 0; i < 100; i++) {
     for (var axis in axes) {
@@ -94,20 +97,6 @@ Utils.moveInDirection = function(direction, value) {
     }
   }
 };
-
-/**
- * I am really just an expensive loop ;)
- * Remove me and all references calling me!
- */
-Utils.justAnExpensiveLoop = function() {
-  // This isn't even doing anything
-  var oops = Array(1000);
-  oops.map(function(val, i) {
-    return Math.PI / 2500 * i;
-  }).filter(function(rad) {
-    return Math.sin(rad) > 0;
-  });
-}
 
 /**
  * Update ship position with current direction and speed
@@ -162,4 +151,3 @@ ENGINE.BackgroundStars.prototype.wrap = function(star) {
   if (pos[0] > bounds[2]) star.x = 0;
   if (pos[1] > bounds[3]) star.y = 0;
 };
-
