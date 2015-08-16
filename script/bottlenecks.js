@@ -48,16 +48,13 @@ Utils.nearest = function(from, entities) {
     var to = entities[i];
     if (from === to) continue;
     var distance = this.distance(from, to);
-    if(!nearestEntity) {
-        nearestEntity = to;
-        currentShortestDistance = distance;
+
+    if(currentShortestDistance && distance > currentShortestDistance) {
         continue;
     }
-
-    if(distance < currentShortestDistance) {
-        nearestEntity = to;
-        currentShortestDistance = distance;
-    }
+    
+    nearestEntity = to;
+    currentShortestDistance = distance;
   }
 
   return nearestEntity;
