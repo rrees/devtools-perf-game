@@ -21,14 +21,13 @@
  * @return {Array} A new array with only passed elements
  */
 Utils.filter = function(array, test) {
-  var result = array.slice(); // Clone array
-  for (var i = 0; i < result.length; i++) {
-    if (!test(result[i])) {
-      result.splice(i, 1); // Remove element
-      i--;
+  var results = []
+  for (var i = 0; i < array.length; i++) {
+    if (test(array[i])) {
+      array.push(array[i]);
     }
   }
-  return result;
+  return results;
 };
 
 /**
@@ -52,7 +51,7 @@ Utils.nearest = function(from, entities) {
     if(currentShortestDistance && distance > currentShortestDistance) {
         continue;
     }
-    
+
     nearestEntity = to;
     currentShortestDistance = distance;
   }
